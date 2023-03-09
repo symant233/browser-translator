@@ -1,11 +1,11 @@
 {
   "name": "chrome-extension-typescript-starter",
-  "version": "1.0.0",
+  "version": "0.0.13",
   "description": "chrome-extension-typescript-starter",
   "main": "index.js",
   "scripts": {
     "watch": "chokidar src -c 'npm run build'",
-    "build": "yarn run clean && node build.mjs",
+    "build": "npm run clean && node build.mjs",
     "clean": "rimraf dist",
     "test": "npx jest",
     "lint": "eslint src/**/*.{ts,tsx}",
