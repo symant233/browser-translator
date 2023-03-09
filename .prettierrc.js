@@ -9,4 +9,5 @@ module.exports = {
     parser: 'typescript',
     bracketSpacing: true,
     printWidth: 120,
+    endOfLine: 'auto',
 }
