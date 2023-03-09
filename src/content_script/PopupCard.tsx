@@ -280,7 +280,7 @@ export function PopupCard(props: IPopupCardProps) {
 
     const translateText = useCallback(
         async (text: string, signal: AbortSignal) => {
-            if (!detectFrom || !detectTo || !translateMode) {
+            if (!text || !detectFrom || !detectTo || !translateMode) {
                 return
             }
             startLoading()
@@ -316,7 +316,7 @@ export function PopupCard(props: IPopupCardProps) {
                         stopLoading()
                         if (reason !== 'stop') {
                             setActionStr('Error')
-                            setErrorMessage(`${actionStr} failed：${reason}`)
+                            setErrorMessage(`${actionStr} failed: ${reason}`)
                         } else {
                             switch (translateMode) {
                                 case 'translate':

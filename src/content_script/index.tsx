@@ -57,9 +57,6 @@ async function hidePopupCard() {
 }
 
 async function showPopupCard(x: number, y: number, text: string) {
-    if (!text) {
-        return
-    }
     const $popupThumb: HTMLDivElement | null = await queryPopupThumbElement()
     if ($popupThumb) {
         $popupThumb.style.display = 'none'
@@ -167,16 +164,35 @@ async function showPopupThumb(text: string, x: number, y: number) {
     $popupThumb.style.top = `${y}px`
 }
 
-document.addEventListener('mouseup', (event: MouseEvent) => {
-    window.setTimeout(async () => {
-        const text = (window.getSelection()?.toString() ?? '').trim()
-        ;(await utils.getSettings()).autoTranslate === true
-            ? showPopupCard(event.pageX + 7, event.pageY + 7, text)
-            : showPopupThumb(text, event.pageX + 7, event.pageY + 7)
-    })
-})
+async function main() {
+    let lastMouseEvent: MouseEvent
 
-document.addEventListener('mousedown', () => {
-    hidePopupCard()
-    hidePopupThumb()
-})
+    document.addEventListener('mouseup', (event: MouseEvent) => {
+        lastMouseEvent = event
+        window.setTimeout(async () => {
+            let text = (window.getSelection()?.toString() ?? '').trim()
+            if (!text) {
+                if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+                    const elem = event.target
+                    text = elem.value.substring(elem.selectionStart ?? 0, elem.selectionEnd ?? 0)
+                }
+            }
+            ;(await utils.getSettings()).autoTranslate === true
+                ? showPopupCard(event.pageX + 7, event.pageY + 7, text)
+                : showPopupThumb(text, event.pageX + 7, event.pageY + 7)
+        })
+    })
+
+    browser.runtime.onMessage.addListener(function (request) {
+        if (request.type === 'open-translator') {
+            showPopupCard(lastMouseEvent.pageX + 7, lastMouseEvent.pageY + 7, '')
+        }
+    })
+
+    document.addEventListener('mousedown', () => {
+        hidePopupCard()
+        hidePopupThumb()
+    })
+}
+
+main()
