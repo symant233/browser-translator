@@ -112,12 +112,12 @@ const useStyles = createUseStyles({
         display: 'flex',
         flexDirection: 'column',
         padding: '10px',
-        borderBottom: '1px solid #e9e9e9',
     },
     'popupCardTranslatedContainer': {
         position: 'relative',
         display: 'flex',
         padding: '16px 10px 10px 10px',
+        borderTop: '1px solid #e9e9e9',
     },
     'actionStr': {
         position: 'absolute',
@@ -551,85 +551,87 @@ export function PopupCard(props: IPopupCardProps) {
                                         </CopyToClipboard>
                                     </div>
                                 </div>
-                                <div className={styles.popupCardTranslatedContainer}>
-                                    {actionStr && (
-                                        <div
-                                            className={clsx({
-                                                [styles.actionStr]: true,
-                                                [styles.error]: !!errorMessage,
-                                            })}
-                                        >
-                                            <div>{actionStr}</div>
-                                            {isLoading ? (
-                                                <span className={styles.writing} />
-                                            ) : errorMessage ? (
-                                                <span>😢</span>
-                                            ) : (
-                                                <span>👍</span>
-                                            )}
-                                        </div>
-                                    )}
-                                    {errorMessage ? (
-                                        <div className={styles.errorMessage}>{errorMessage}</div>
-                                    ) : (
-                                        <div
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <div className={styles.popupCardTranslatedContentContainer}>
-                                                <div>
-                                                    {translatedLines.map((line, i) => {
-                                                        return (
-                                                            <p className={styles.paragraph} key={`p-${i}`}>
-                                                                {line}
-                                                                {isLoading && i === translatedLines.length - 1 && (
-                                                                    <span className={styles.caret} />
-                                                                )}
-                                                            </p>
-                                                        )
-                                                    })}
-                                                </div>
+                                {originalText !== '' && (
+                                    <div className={styles.popupCardTranslatedContainer}>
+                                        {actionStr && (
+                                            <div
+                                                className={clsx({
+                                                    [styles.actionStr]: true,
+                                                    [styles.error]: !!errorMessage,
+                                                })}
+                                            >
+                                                <div>{actionStr}</div>
+                                                {isLoading ? (
+                                                    <span className={styles.writing} />
+                                                ) : errorMessage ? (
+                                                    <span>😢</span>
+                                                ) : (
+                                                    <span>👍</span>
+                                                )}
                                             </div>
-                                            <div className={styles.actionButtonsContainer}>
-                                                <div style={{ marginRight: 'auto' }} />
-                                                <div
-                                                    className={styles.actionButton}
-                                                    onClick={() => {
-                                                        if (isSpeakingTranslatedText) {
-                                                            browser.runtime.sendMessage({
-                                                                type: 'stopSpeaking',
-                                                            })
-                                                            setIsSpeakingTranslatedText(false)
-                                                            return
-                                                        }
-                                                        setIsSpeakingTranslatedText(true)
-                                                        browser.runtime.sendMessage({
-                                                            type: 'speak',
-                                                            text: translatedText,
-                                                        })
-                                                    }}
-                                                >
-                                                    <HiOutlineSpeakerWave size={13} />
-                                                </div>
-                                                <CopyToClipboard
-                                                    text={translatedText}
-                                                    onCopy={() => {
-                                                        toast('Copied to clipboard', {
-                                                            duration: 3000,
-                                                            icon: '👏',
-                                                        })
-                                                    }}
-                                                >
-                                                    <div className={styles.actionButton}>
-                                                        <RxCopy size={13} />
+                                        )}
+                                        {errorMessage ? (
+                                            <div className={styles.errorMessage}>{errorMessage}</div>
+                                        ) : (
+                                            <div
+                                                style={{
+                                                    width: '100%',
+                                                }}
+                                            >
+                                                <div className={styles.popupCardTranslatedContentContainer}>
+                                                    <div>
+                                                        {translatedLines.map((line, i) => {
+                                                            return (
+                                                                <p className={styles.paragraph} key={`p-${i}`}>
+                                                                    {line}
+                                                                    {isLoading && i === translatedLines.length - 1 && (
+                                                                        <span className={styles.caret} />
+                                                                    )}
+                                                                </p>
+                                                            )
+                                                        })}
                                                     </div>
-                                                </CopyToClipboard>
+                                                </div>
+                                                <div className={styles.actionButtonsContainer}>
+                                                    <div style={{ marginRight: 'auto' }} />
+                                                    <div
+                                                        className={styles.actionButton}
+                                                        onClick={() => {
+                                                            if (isSpeakingTranslatedText) {
+                                                                browser.runtime.sendMessage({
+                                                                    type: 'stopSpeaking',
+                                                                })
+                                                                setIsSpeakingTranslatedText(false)
+                                                                return
+                                                            }
+                                                            setIsSpeakingTranslatedText(true)
+                                                            browser.runtime.sendMessage({
+                                                                type: 'speak',
+                                                                text: translatedText,
+                                                            })
+                                                        }}
+                                                    >
+                                                        <HiOutlineSpeakerWave size={13} />
+                                                    </div>
+                                                    <CopyToClipboard
+                                                        text={translatedText}
+                                                        onCopy={() => {
+                                                            toast('Copied to clipboard', {
+                                                                duration: 3000,
+                                                                icon: '👏',
+                                                            })
+                                                        }}
+                                                    >
+                                                        <div className={styles.actionButton}>
+                                                            <RxCopy size={13} />
+                                                        </div>
+                                                    </CopyToClipboard>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
-                                    <Toaster />
-                                </div>
+                                        )}
+                                        <Toaster />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
