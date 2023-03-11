@@ -35,7 +35,15 @@ const langOptions: Value = supportLanguages.reduce((acc, [id, label]) => {
 }, [] as Value)
 
 const useStyles = createUseStyles({
-    'popupCard': {},
+    'popupCard': {
+        height: '100%',
+    },
+    'settingsIcon': {
+        position: 'absolute',
+        cursor: 'pointer',
+        bottom: '10px',
+        right: '10px',
+    },
     'popupCardHeaderContainer': {
         display: 'flex',
         flexDirection: 'row',

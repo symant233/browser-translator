@@ -20,24 +20,25 @@ browser.runtime.onMessage.addListener(function (request) {
         }
     }
 })
-
-chrome.contextMenus.create(
-    {
-        id: 'open-translator',
-        type: 'normal',
-        title: 'OpenAI Translator',
-        contexts: ['page'],
-    },
-    () => {
-        chrome.runtime.lastError
-    }
-)
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
-    if (tab?.id) {
-        chrome.tabs.sendMessage(tab.id, {
-            type: 'open-translator',
-            info,
-            tab,
-        })
-    }
-})
+if (typeof chrome !== 'undefined') {
+    chrome.contextMenus.create(
+        {
+            id: 'open-translator',
+            type: 'normal',
+            title: 'OpenAI Translator',
+            contexts: ['page', 'selection'],
+        },
+        () => {
+            chrome.runtime.lastError
+        }
+    )
+    chrome.contextMenus.onClicked.addListener(function (info, tab) {
+        if (tab?.id) {
+            chrome.tabs.sendMessage(tab.id, {
+                type: 'open-translator',
+                info,
+                tab,
+            })
+        }
+    })
+}
