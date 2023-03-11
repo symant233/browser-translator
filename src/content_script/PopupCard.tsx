@@ -77,7 +77,7 @@ const useStyles = createUseStyles({
         flexDirection: 'row',
         alignItems: 'center',
         gap: '5px',
-        marginLeft: '10px',
+        marginLeft: 'auto',
     },
     'popupCardHeaderActionsContainer': {
         display: 'flex',
